@@ -10,14 +10,15 @@ public class RangeMergeUtil {
 
     /**
      * 在一组有序不交叉不重复的数字边界中,插入一个新的数字
-     * 1. 如果已存在,返回null
-     * 2. 如果相连,融合
-     * 3. 如果不相连,新增一个边界
+     * 1. 如果列表为空,新增边界
+     * 2. 如果已存在,无变化
+     * 3. 如果相连(左相连,右相连,左右均相连),融合
+     * 4. 如果不相连,新增一个边界
      * 详见测试用例
      *
      * @param list 不为null
      * @param num  插入数字
-     * @return  插入成功 true, 插入失败 false
+     * @return 插入成功 true, 插入失败 false
      */
     public static boolean insert(List<Bound> list, int num) {
         final Bound newBound = new Bound(num, num);
@@ -26,9 +27,9 @@ public class RangeMergeUtil {
             return true;
         }
 
-        //num之前的Bound
+        //num之前的Bound下标
         int previous = -1;
-        //num之后的bound
+        //num之后的Bound下标
         int next = -1;
         for (int i = 0; i < list.size(); i++) {
             //已包含无需再处理
@@ -52,7 +53,7 @@ public class RangeMergeUtil {
         } else {
             mergeSuccess = mergeNext(num, list, next);
         }
-        //两侧都未发生merge,在中间插入新增bound
+        //两侧都未发生merge,插入新Bound
         if (!mergeSuccess) {
             list.add(previous + 1, newBound);
         }
